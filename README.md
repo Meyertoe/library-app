@@ -52,6 +52,10 @@ dotnet build backend/Library.Api
 npm --prefix frontend run build
 ```
 
+## Verifiering inför inlämning
+
+Sluttestat 2026-09-20 med Angulars produktionsbygge och .NET Release: registrering/login/logout, skyddade routes/API, Books och Quotes CRUD, fem startcitat och isolering mellan två användares citat. Alla åtta routes kontrollerades i ljust/mörkt tema vid 320, 375, 768 och 1440 px. Ett separat produktionspaket testades med en tillfällig SQLite-databas: migration från tom databas, upprepad migration, same-origin API, direktlänkar och bevarade data efter omstart. Publik HTTPS och värdens Linux-miljö återstår att verifiera efter kontoåtkomst.
+
 ## Konfiguration och produktion
 
 Ingen signing secret finns i projektets konfigurationsfiler. Backend vägrar starta om nyckeln saknas eller är kortare än 32 byte. Använd en slumpgenererad nyckel, exempelvis 48 slumpbyte kodade som Base64, via driftplattformens hemlighetshantering.
@@ -66,12 +70,8 @@ Ingen signing secret finns i projektets konfigurationsfiler. Backend vägrar sta
 | `AllowedHosts` | Sätt till den/de hostnamn reverse proxyn vidarebefordrar |
 | `ASPNETCORE_URLS` | Intern lyssningsadress enligt driftplattformen, exempelvis `http://0.0.0.0:8080` |
 
-**Produktionsupplägg utan kodändring:** servera `frontend/dist/frontend/browser/` på webbplatsens HTTPS-origin. Låt samma webbservers reverse proxy vidarebefordra `/api/` till .NET-appen **med hela `/api/...`-sökvägen och Authorization-headern bevarade**. Övriga Angular-routes ska falla tillbaka till `index.html`; API-fel ska inte skickas till SPA-fallbacken.
+**Produktionspaket:** .NET serverar både API:t och Angulars byggda filer från `wwwroot`. Kör `bash deploy/package.sh` för ett fristående Linux x64-paket med .NET 9-runtime. Angulars relativa `/api`-adresser fungerar på samma HTTPS-origin utan CORS och utan utvecklingsproxy. Direktlänkar till Angular går till `index.html`; okända API-sökvägar ger 404.
 
-Exempel: webbläsarens `/api/books` blir `https://din-domän/api/books`, och proxyn skickar det till `http://api:8080/api/books`. Angulars `proxy.conf.json` används inte i production. TLS/HTTPS-redirect och HSTS hanteras på den publika reverse proxyn; exponera inte intern HTTP direkt.
-
-Detta är **same-origin**, så CORS behövs inte och är inte aktiverat. Om frontend i stället ska anropa ett API på en annan origin måste API-basadress och interceptorns tillåtna destination ändras, och backend måste få en CORS-policy för exakt frontend-origin med nödvändiga metoder och Authorization/Content-Type. Enbart CORS räcker inte med nuvarande relativa API-adresser.
-
-Före deployment: välj värd, konfigurera HTTPS/reverse proxy, hemligheter och beständig SQLite-lagring med backup, applicera migrationer med produktionskonfiguration och testa direktlänkar samt API-anrop. Använd en API-instans med denna SQLite-lösning. Inget är deployat.
+Se [publiceringsinstruktionerna](deploy/README.md) för alwaysdata Free, beständig SQLite, hemligheter, HTTPS och backup. Publicering är ännu inte verifierad på ett hostingkonto; detta är inte en live-länk. Produktionsmigrationer körs uttryckligen med `./Library.Api --migrate` medan webbplatsen är stoppad, efter backup. Normal start ändrar inte databasschemat.
 
 JWT lagras i localStorage enligt testkravet. Logout rensar lokal token; en redan utfärdad token gäller till expiration. CRUD skyddas på backend, och citatägaren hämtas alltid från JWT, aldrig från requestens UserId.

@@ -7,7 +7,9 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 
-var builder = WebApplication.CreateBuilder(args);
+// Explicit maintenance mode; migrations never run during normal web startup.
+var migrateOnly = args.Contains("--migrate");
+var builder = WebApplication.CreateBuilder(args.Where(arg => arg != "--migrate").ToArray());
 
 builder.Services.AddControllers();
 builder.Services.AddDbContext<AppDbContext>(options =>
@@ -44,8 +46,21 @@ builder.Services.AddAuthorization();
 
 var app = builder.Build();
 
+if (migrateOnly)
+{
+    using var scope = app.Services.CreateScope();
+    await scope.ServiceProvider.GetRequiredService<AppDbContext>().Database.MigrateAsync();
+    return;
+}
+
+// The production package serves Angular and the API on the same origin.
+app.UseDefaultFiles();
+app.UseStaticFiles();
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
+// Unknown API URLs must stay API 404s, never return Angular's index.html.
+app.Map("/api/{**path}", () => Results.NotFound());
+app.MapFallbackToFile("index.html");
 
 app.Run();

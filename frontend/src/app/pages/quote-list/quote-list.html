@@ -1,11 +1,11 @@
-<div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-4">
-  <h1 class="mb-0">Mina citat</h1>
+<div class="page-heading d-flex flex-wrap align-items-center justify-content-between gap-3 mb-4">
+  <div><p class="eyebrow">Ord att spara</p><h1 class="mb-0">Mina citat</h1><p class="page-description">Dina sparade ord och tankar.</p></div>
   <a routerLink="/quotes/new" class="btn btn-primary">
     <i class="fa-solid fa-plus me-2" aria-hidden="true"></i>Lägg till citat
   </a>
 </div>
 @if (loading) {
-  <p role="status">Laddar citat...</p>
+  <p class="loading-state" role="status"><i class="fa-solid fa-quote-left me-2" aria-hidden="true"></i>Laddar citat...</p>
 } @else if (errorMessage) {
   <div class="alert alert-danger" role="alert">
     <p>{{ errorMessage }}</p>
@@ -14,18 +14,19 @@
 } @else {
   @if (deleteError) { <p class="alert alert-danger" role="alert">{{ deleteError }}</p> }
   @if (quotes.length === 0) {
-    <p class="bg-body-tertiary border rounded-3 p-3" role="status">Du har inga citat ännu.</p>
+    <p class="empty-state" role="status">Du har inga citat ännu.</p>
   } @else {
     <div class="row row-cols-1 row-cols-md-2 row-cols-xl-3 g-3">
       @for (quote of quotes; track quote.id) {
         <div class="col">
-          <article class="card h-100 rounded-3 shadow-sm" [attr.aria-labelledby]="'quote-text-' + quote.id">
+          <article class="card quote-card h-100 rounded-3 shadow-sm" [attr.aria-labelledby]="'quote-text-' + quote.id">
             <div class="card-body d-flex flex-column">
+              <i class="fa-solid fa-quote-left card-symbol" aria-hidden="true"></i>
               <figure class="mb-4">
                 <blockquote class="blockquote quote-text" [id]="'quote-text-' + quote.id">{{ quote.text }}</blockquote>
                 <figcaption class="blockquote-footer text-body-secondary mt-2">{{ quote.author }}</figcaption>
               </figure>
-              <div class="d-flex flex-wrap gap-2 mt-auto">
+              <div class="card-actions d-flex flex-wrap gap-2 mt-auto">
                 <a [routerLink]="['/quotes', quote.id, 'edit']" class="btn btn-outline-primary">
                   <i class="fa-solid fa-pen me-2" aria-hidden="true"></i>Redigera
                 </a>

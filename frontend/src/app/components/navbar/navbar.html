@@ -1,6 +1,6 @@
 <nav class="navbar navbar-expand-lg bg-body-tertiary border-bottom" aria-label="Huvudnavigation" (keydown.escape)="menuOpen = false">
   <div class="container">
-    <a class="navbar-brand fw-semibold" routerLink="/" (click)="menuOpen = false">Library App</a>
+    <a class="navbar-brand fw-semibold" routerLink="/" (click)="menuOpen = false"><span class="brand-icon"><i class="fa-solid fa-book-open" aria-hidden="true"></i></span>Library App</a>
     <button type="button" class="navbar-toggler" aria-controls="main-navigation"
       [attr.aria-expanded]="menuOpen" [attr.aria-label]="menuOpen ? 'Stäng meny' : 'Öppna meny'"
       (click)="menuOpen = !menuOpen">

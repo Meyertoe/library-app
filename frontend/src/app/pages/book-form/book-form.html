@@ -1,8 +1,9 @@
 <section class="book-form mx-auto bg-body border rounded-3 shadow-sm p-3 p-sm-4">
-  <a routerLink="/" class="d-inline-block mb-3">Tillbaka till böcker</a>
+  <a routerLink="/" class="form-back d-inline-block mb-4"><i class="fa-solid fa-arrow-left me-2" aria-hidden="true"></i>Tillbaka till böcker</a>
+  <p class="eyebrow"><i class="fa-solid fa-book-open me-2" aria-hidden="true"></i>Biblioteket</p>
   <h1 class="h2 mb-4">{{ id === null ? 'Lägg till ny bok' : 'Redigera bok' }}</h1>
   @if (loading) {
-    <p role="status">Laddar bok...</p>
+    <p class="loading-state" role="status">Laddar bok...</p>
   } @else if (loadError) {
     <p class="alert alert-danger" role="alert">{{ loadError }}</p>
   } @else {

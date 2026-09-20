@@ -1,0 +1,11 @@
+.username { overflow-wrap: anywhere; }
+.nav-link.active { font-weight: 600; }
+
+@media (min-width: 992px) {
+  .username {
+    max-width: 10rem;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+}

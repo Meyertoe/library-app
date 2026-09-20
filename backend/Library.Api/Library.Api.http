@@ -1,0 +1,29 @@
+@Library_Api_HostAddress = http://localhost:5050
+@username = replace-with-your-local-username
+@password = replace-with-your-local-password
+
+GET {{Library_Api_HostAddress}}/api/health
+Accept: application/json
+
+### Register a local test account (choose your own password)
+POST {{Library_Api_HostAddress}}/api/auth/register
+Content-Type: application/json
+
+{
+  "username": "{{username}}",
+  "password": "{{password}}"
+}
+
+### Login
+POST {{Library_Api_HostAddress}}/api/auth/login
+Content-Type: application/json
+
+{
+  "username": "{{username}}",
+  "password": "{{password}}"
+}
+
+### Paste the token from the login response below
+@token = paste-token-here
+GET {{Library_Api_HostAddress}}/api/auth/me
+Authorization: Bearer {{token}}

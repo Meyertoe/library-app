@@ -1,0 +1,50 @@
+<section class="book-form mx-auto bg-body border rounded-3 shadow-sm p-3 p-sm-4">
+  <a routerLink="/" class="d-inline-block mb-3">Tillbaka till böcker</a>
+  <h1 class="h2 mb-4">{{ id === null ? 'Lägg till ny bok' : 'Redigera bok' }}</h1>
+  @if (loading) {
+    <p role="status">Laddar bok...</p>
+  } @else if (loadError) {
+    <p class="alert alert-danger" role="alert">{{ loadError }}</p>
+  } @else {
+    @if (saveError) { <p class="alert alert-danger" role="alert">{{ saveError }}</p> }
+    <form #form="ngForm" (ngSubmit)="submit(form)">
+      <div class="mb-3">
+        <label for="title" class="form-label">Titel</label>
+        <input id="title" name="title" class="form-control" [(ngModel)]="book.title"
+          required maxlength="200" pattern=".*\S.*" #title="ngModel"
+          [attr.aria-invalid]="title.invalid && (title.touched || form.submitted) ? 'true' : null"
+          aria-describedby="title-help">
+        <p id="title-help" class="form-text">Obligatoriskt, högst 200 tecken.</p>
+        @if (title.invalid && (title.touched || form.submitted)) {
+          <p class="text-danger-emphasis">Ange en titel. Enbart mellanslag räcker inte.</p>
+        }
+      </div>
+      <div class="mb-3">
+        <label for="author" class="form-label">Författare</label>
+        <input id="author" name="author" class="form-control" [(ngModel)]="book.author"
+          required maxlength="100" pattern=".*\S.*" #author="ngModel"
+          [attr.aria-invalid]="author.invalid && (author.touched || form.submitted) ? 'true' : null"
+          aria-describedby="author-help">
+        <p id="author-help" class="form-text">Obligatoriskt, högst 100 tecken.</p>
+        @if (author.invalid && (author.touched || form.submitted)) {
+          <p class="text-danger-emphasis">Ange en författare. Enbart mellanslag räcker inte.</p>
+        }
+      </div>
+      <div class="mb-4">
+        <label for="publicationDate" class="form-label">Publiceringsdatum</label>
+        <input id="publicationDate" name="publicationDate" type="date" class="form-control"
+          [(ngModel)]="book.publicationDate" required min="0001-01-01" max="9999-12-31"
+          #publicationDate="ngModel">
+        @if (publicationDate.invalid && (publicationDate.touched || form.submitted)) {
+          <p class="text-danger-emphasis">Ange ett publiceringsdatum.</p>
+        }
+      </div>
+      <div class="d-flex flex-wrap gap-2">
+        <button type="submit" class="btn btn-primary" [disabled]="submitting">
+          <i class="fa-solid fa-floppy-disk me-2" aria-hidden="true"></i>{{ submitting ? 'Sparar…' : 'Spara bok' }}
+        </button>
+        <a routerLink="/" class="btn btn-outline-secondary">Avbryt</a>
+      </div>
+    </form>
+  }
+</section>

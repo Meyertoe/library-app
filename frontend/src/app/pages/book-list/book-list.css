@@ -1,0 +1,4 @@
+/* Long titles and names must wrap inside the cards on small screens. */
+:host {
+  overflow-wrap: anywhere;
+}

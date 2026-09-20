@@ -1,0 +1,33 @@
+<nav class="navbar navbar-expand-lg bg-body-tertiary border-bottom" aria-label="Huvudnavigation" (keydown.escape)="menuOpen = false">
+  <div class="container">
+    <a class="navbar-brand fw-semibold" routerLink="/" (click)="menuOpen = false">Library App</a>
+    <button type="button" class="navbar-toggler" aria-controls="main-navigation"
+      [attr.aria-expanded]="menuOpen" [attr.aria-label]="menuOpen ? 'Stäng meny' : 'Öppna meny'"
+      (click)="menuOpen = !menuOpen">
+      <span class="navbar-toggler-icon" aria-hidden="true"></span>
+    </button>
+    <div id="main-navigation" class="collapse navbar-collapse" [class.show]="menuOpen">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }"
+            ariaCurrentWhenActive="page" (click)="menuOpen = false">Böcker</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/quotes" routerLinkActive="active"
+            ariaCurrentWhenActive="page" (click)="menuOpen = false">Mina citat</a>
+        </li>
+      </ul>
+      <span class="navbar-text me-lg-3 d-block username" [title]="auth.getUsername()">{{ auth.getUsername() }}</span>
+      <div class="d-flex flex-wrap gap-2 my-2 my-lg-0">
+        <button type="button" class="btn btn-outline-secondary" (click)="themeService.toggle()"
+          [attr.aria-label]="themeService.theme() === 'dark' ? 'Byt till ljust tema' : 'Byt till mörkt tema'">
+          <i class="fa-solid me-2" [class.fa-sun]="themeService.theme() === 'dark'"
+            [class.fa-moon]="themeService.theme() === 'light'" aria-hidden="true"></i>{{ themeService.theme() === 'dark' ? 'Ljust tema' : 'Mörkt tema' }}
+        </button>
+        <button type="button" class="btn btn-outline-secondary" (click)="logout()">
+          <i class="fa-solid fa-right-from-bracket me-2" aria-hidden="true"></i>Logga ut
+        </button>
+      </div>
+    </div>
+  </div>
+</nav>

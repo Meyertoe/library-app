@@ -1,0 +1,25 @@
+/* Bootstrap variables keep every surface aligned with the global color mode. */
+body {
+  min-height: 100vh;
+  background-color: var(--bs-tertiary-bg);
+}
+
+.auth-form { max-width: 28rem; }
+h1, h2 { overflow-wrap: anywhere; }
+.form-label { font-weight: 600; }
+.form-control { min-width: 0; }
+.btn { min-height: 2.5rem; }
+
+/* Bootstrap's fixed outline colors need brighter text on dark surfaces. */
+[data-bs-theme="dark"] .btn-outline-primary {
+  --bs-btn-color: var(--bs-primary-text-emphasis);
+  --bs-btn-border-color: var(--bs-primary-text-emphasis);
+}
+[data-bs-theme="dark"] .btn-outline-danger {
+  --bs-btn-color: var(--bs-danger-text-emphasis);
+  --bs-btn-border-color: var(--bs-danger-text-emphasis);
+}
+[data-bs-theme="dark"] .btn-outline-secondary {
+  --bs-btn-color: var(--bs-secondary-text-emphasis);
+  --bs-btn-border-color: var(--bs-secondary-color);
+}

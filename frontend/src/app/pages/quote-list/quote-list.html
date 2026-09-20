@@ -1,0 +1,42 @@
+<div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-4">
+  <h1 class="mb-0">Mina citat</h1>
+  <a routerLink="/quotes/new" class="btn btn-primary">
+    <i class="fa-solid fa-plus me-2" aria-hidden="true"></i>Lägg till citat
+  </a>
+</div>
+@if (loading) {
+  <p role="status">Laddar citat...</p>
+} @else if (errorMessage) {
+  <div class="alert alert-danger" role="alert">
+    <p>{{ errorMessage }}</p>
+    <button type="button" class="btn btn-outline-danger" (click)="loadQuotes()">Försök igen</button>
+  </div>
+} @else {
+  @if (deleteError) { <p class="alert alert-danger" role="alert">{{ deleteError }}</p> }
+  @if (quotes.length === 0) {
+    <p class="bg-body-tertiary border rounded-3 p-3" role="status">Du har inga citat ännu.</p>
+  } @else {
+    <div class="row row-cols-1 row-cols-md-2 row-cols-xl-3 g-3">
+      @for (quote of quotes; track quote.id) {
+        <div class="col">
+          <article class="card h-100 rounded-3 shadow-sm" [attr.aria-labelledby]="'quote-text-' + quote.id">
+            <div class="card-body d-flex flex-column">
+              <figure class="mb-4">
+                <blockquote class="blockquote quote-text" [id]="'quote-text-' + quote.id">{{ quote.text }}</blockquote>
+                <figcaption class="blockquote-footer text-body-secondary mt-2">{{ quote.author }}</figcaption>
+              </figure>
+              <div class="d-flex flex-wrap gap-2 mt-auto">
+                <a [routerLink]="['/quotes', quote.id, 'edit']" class="btn btn-outline-primary">
+                  <i class="fa-solid fa-pen me-2" aria-hidden="true"></i>Redigera
+                </a>
+                <button type="button" class="btn btn-outline-danger" (click)="deleteQuote(quote)" [disabled]="deletingId !== null">
+                  <i class="fa-solid fa-trash me-2" aria-hidden="true"></i>{{ deletingId === quote.id ? 'Raderar…' : 'Radera' }}
+                </button>
+              </div>
+            </div>
+          </article>
+        </div>
+      }
+    </div>
+  }
+}
